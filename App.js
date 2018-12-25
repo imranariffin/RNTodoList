@@ -1,16 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import {
-  StyleSheet, Text, View, ScrollView, TextInput, Button
-} from 'react-native';
+  StyleSheet, Text, View, FlatList, TextInput, Button
+} from 'react-native'
+import ListItem from './lib/components/ListItem'
 
 export default class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      items: [1,2,3,4].map(x => x.toString()),
+      items: [],
+      isLoading: true,
       text: '',
       addingItem: false,
     }
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      this.setState({
+        items: [1,2,3,4,5,6,7,8,9].map(x => x.toString()),
+        isLoading: false,
+      })
+    }, 1000)
   }
 
   render() {
@@ -64,20 +75,33 @@ export default class App extends Component {
           />
 
         }
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          scrollEnabled={true}
-        >
-          {
-            this.state.items.map(item =>
-              <Text
-                key={`${item}`}
-                style={styles.item}
-              >
-                {item}
-              </Text>)
+        <FlatList
+          data={this.state.items}
+          extraData={this.state}
+          keyExtractor={(item, index) => `${index}`}
+          refreshing={!!this.state.isLoading}
+          onRefresh={() => {
+            this.setState({items: [], isLoading: true})
+            setTimeout(() => {
+              this.setState({
+                items: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,16,17,17,18,19,20,21,22,24,25,262,7].map(e => e.toString()),
+                isLoading: false
+              })
+            }, 1000)
+          }}
+          onEndReached={() => {
+            this.setState({isLoading: true})
+            setTimeout(() => {
+              this.setState({
+                items: this.state.items.concat([101,102,103,104,105,106,107,109]),
+                isLoading: false,
+              })
+            }, 1000)
+          }}
+          onEndReachedThreshold={0.01}
+          renderItem={({item}) => (<ListItem>{item}</ListItem>)
           }
-        </ScrollView>
+        />
       </View>
     )
   }
@@ -100,12 +124,4 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     backgroundColor: 'green'
   },
-  item: {
-    padding: 5,
-    height: 80,
-    flexGrow: 0,
-    textAlign: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'grey'
-  }
 })
