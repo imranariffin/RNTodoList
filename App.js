@@ -24,6 +24,11 @@ export default class App extends Component {
     }, 1000)
   }
 
+  deleteItem = (item) => () => {
+    const items = this.state.items.filter(e => e !== item)
+    this.setState({items})
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -84,7 +89,7 @@ export default class App extends Component {
             this.setState({items: [], isLoading: true})
             setTimeout(() => {
               this.setState({
-                items: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,15,16,17,17,18,19,20,21,22,24,25,262,7].map(e => e.toString()),
+                items: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,17,18,19,20,21,22,24,25,262].map(e => e.toString()),
                 isLoading: false
               })
             }, 1000)
@@ -99,7 +104,7 @@ export default class App extends Component {
             }, 1000)
           }}
           onEndReachedThreshold={0.01}
-          renderItem={({item}) => (<ListItem>{item}</ListItem>)
+          renderItem={({item}) => (<ListItem deleteItem={this.deleteItem(item)}>{item}</ListItem>)
           }
         />
       </View>
