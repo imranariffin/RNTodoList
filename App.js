@@ -1,49 +1,111 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+import React, { Component } from 'react';
+import {
+  StyleSheet, Text, View, ScrollView, TextInput, Button
+} from 'react-native';
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+export default class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      items: [1,2,3,4].map(x => x.toString()),
+      text: '',
+      addingItem: false,
+    }
+  }
 
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
-
-type Props = {};
-export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        {
+          this.state.addingItem &&
+          <TextInput
+            blurOnSubmit={false}
+            style={styles.textInput}
+            value={this.state.text}
+            onChangeText={text => this.setState({text})}
+            onSubmitEditing={e => {
+              this.setState({
+                  items: [this.state.text, ...this.state.items],
+                  text: ''
+              })
+            }}
+          />
+        }
+        {
+          this.state.addingItem &&
+          <Button
+            title='Add item'
+            color='turquoise'
+            disabled={!this.state.text}
+            onPress={() => {
+              if (this.state.text) {
+                this.setState({
+                  items: [this.state.text, ...this.state.items],
+                  text: ''
+                })
+              }
+            }}
+          /> ||
+          <Button
+            title='Add item'
+            onPress={() => {
+              this.setState({addingItem: true})
+            }}
+          />
+        }
+        {
+          this.state.addingItem &&
+          <Button
+            title='Cancel'
+            color='red'
+            onPress={() => {
+              this.setState({addingItem: false})
+            }}
+          />
+
+        }
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          scrollEnabled={true}
+        >
+          {
+            this.state.items.map(item =>
+              <Text
+                key={`${item}`}
+                style={styles.item}
+              >
+                {item}
+              </Text>)
+          }
+        </ScrollView>
       </View>
-    );
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    height: '100%',
+    width: '100%',
+    backgroundColor: 'blue'
+  },
+  textInput: {
+    width: '100%',
+    height: 40,
+    backgroundColor: 'yellow'
+  },
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
+    backgroundColor: 'green'
+  },
+  item: {
+    padding: 5,
+    height: 80,
+    flexGrow: 0,
+    textAlign: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+    backgroundColor: 'grey'
+  }
+})
