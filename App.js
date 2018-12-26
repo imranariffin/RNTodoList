@@ -7,12 +7,7 @@ import AddItem from './lib/components/AddItem'
 import NavTab from './lib/components/NavTab'
 import FloatingButton from './lib/components/FloatingButton/index'
 import TodoList from './lib/components/TodoList'
-
-export const SCREENS = {
-  ALL: 'ALL',
-  ACTIVE: 'ACTIVE',
-  COMPLETED: 'COMPLETED'
-}
+import { SCREENS, COLORS } from './lib/constants'
 
 export default class App extends Component {
   constructor(props) {
@@ -199,7 +194,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'blue'
+    backgroundColor: COLORS.BLUE
   },
   body: {
     flex: 1,
