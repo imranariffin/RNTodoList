@@ -5,6 +5,7 @@ import {
 import Header from './lib/components/Header'
 import AddItem from './lib/components/AddItem'
 import NavTab from './lib/components/NavTab'
+import FloatingButton from './lib/components/FloatingButton/index'
 import All from './lib/screens/All'
 import Active from './lib/screens/Active'
 import Completed from './lib/screens/Completed'
@@ -67,11 +68,15 @@ export default class App extends Component {
           completed: !item.completed
         }
       }
-
       return {...item}
     })
-
     this.setState({items})
+  }
+
+  toggleAddNewItem = () => {
+    this.setState({
+      addingItem: !this.state.addingItem
+    })
   }
 
   render() {
@@ -97,11 +102,14 @@ export default class App extends Component {
       <View style={styles.container}>
         <Header/>
         <View style={styles.body}>
-          <AddItem
-            addItemText={this.state.text}
-            onEditingAddItem={this.editingAddItem}
-            onAddItem={this.onDoneEditingAddItem}
-          />
+          {
+            this.state.addingItem && 
+            <AddItem
+              addItemText={this.state.text}
+              onEditingAddItem={this.editingAddItem}
+              onAddItem={this.onDoneEditingAddItem}
+            />
+          }
           <Screen
             items={this.state.items}
             isLoading={this.state.isLoading}
@@ -110,6 +118,7 @@ export default class App extends Component {
           />
         </View>
         <NavTab/>
+        <FloatingButton onPress={this.toggleAddNewItem}/>
       </View>
     )
   }
