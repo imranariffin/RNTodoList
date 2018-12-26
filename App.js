@@ -7,7 +7,8 @@ import AddItem from './lib/components/AddItem'
 import NavTab from './lib/components/NavTab'
 import FloatingButton from './lib/components/FloatingButton/index'
 import TodoList from './lib/components/TodoList'
-import { SCREENS, COLORS } from './lib/constants'
+import Tabs from './lib/constants/Tabs'
+import Colors from './lib/constants/Colors'
 
 export default class App extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class App extends Component {
       },
       text: '',
       addingItem: false,
-      currentTab: SCREENS.ALL,
+      currentTab: Tabs.ALL,
     }
   }
 
@@ -30,15 +31,15 @@ export default class App extends Component {
     const currentTab = this.state.currentTab
     let items
     switch(currentTab) {
-      case SCREENS.ALL:
+      case Tabs.all:
         items = this.state.items.allIds
           .map(itemId => this.state.items.byIds[itemId])
         break
-      case SCREENS.ACTIVE:
+      case Tabs.active:
         items = this.state.items.activeIds
           .map(itemId => this.state.items.byIds[itemId])
         break
-      case SCREENS.COMPLETED:
+      case Tabs.completed:
         items = this.state.items.completedIds
           .map(itemId => this.state.items.byIds[itemId])
         break
@@ -194,7 +195,7 @@ export default class App extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.BLUE
+    backgroundColor: Colors.blue
   },
   body: {
     flex: 1,
