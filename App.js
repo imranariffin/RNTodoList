@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import {
   StyleSheet, Text, View, FlatList, TextInput, Button
 } from 'react-native'
-import ListItem from './lib/components/ListItem'
 import Header from './lib/components/Header'
+import AddItem from './lib/components/AddItem'
 import NavTab from './lib/components/NavTab'
 import All from './lib/screens/All'
 import Active from './lib/screens/Active'
@@ -29,14 +29,48 @@ export default class App extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.setState({
-        items: [1,2,3,4,5,6,7,8,9].map(x => x.toString()),
+        items: [1,2,3,4,5,6,7,8,9].map(x => ({
+          id: x.toString(),
+          text: `Item #${x}`,
+          completed: false,
+        })),
         isLoading: false,
       })
     }, 1000)
   }
 
-  deleteItem = (item) => () => {
-    const items = this.state.items.filter(e => e !== item)
+  deleteItem = (itemId) => () => {
+    const items = this.state.items.filter(e => e.id !== itemId)
+    this.setState({items})
+  }
+
+  editingAddItem = (text) => {
+    this.setState({text})
+  }
+
+  onDoneEditingAddItem = () => {
+    this.setState({
+      items: [{
+        id: `${this.state.items.length}`,
+        completed: false,
+        text: this.state.text,
+      }].concat(this.state.items),
+      text: ''
+    })
+  }
+
+  toggleCompleted = (itemId) => () => {
+    const items = this.state.items.map(item => {
+      if (item.id === itemId) {
+        return {
+          ...item,
+          completed: !item.completed
+        }
+      }
+
+      return {...item}
+    })
+
     this.setState({items})
   }
 
@@ -62,11 +96,19 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <Header/>
-        <Screen
-          items={this.state.items}
-          isLoading={this.state.isLoading}
-          deleteItem={this.deleteItem}
-        />
+        <View style={styles.body}>
+          <AddItem
+            addItemText={this.state.text}
+            onEditingAddItem={this.editingAddItem}
+            onAddItem={this.onDoneEditingAddItem}
+          />
+          <Screen
+            items={this.state.items}
+            isLoading={this.state.isLoading}
+            deleteItem={this.deleteItem}
+            toggleCompleted={this.toggleCompleted}
+          />
+        </View>
         <NavTab/>
       </View>
     )
@@ -78,4 +120,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'blue'
   },
+  body: {
+    flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+  }
 })
