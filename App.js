@@ -67,7 +67,9 @@ export default class App extends Component {
             toggleCompleted={this.toggleCompleted}
           />
         </View>
-        <NavTab onSelectTab={this.onSelectTab}/>
+        <NavTab
+          onSelectTab={this.onSelectTab}
+          currentTab={this.state.currentTab}/>
         <FloatingButton onPress={this.toggleAddNewItem}/>
       </View>
     )
@@ -180,8 +182,9 @@ export default class App extends Component {
   }
 
   toggleAddNewItem = () => {
+    const addingItem = !this.state.addingItem
     this.setState({
-      addingItem: !this.state.addingItem
+      addingItem
     })
   }
 
