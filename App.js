@@ -70,7 +70,9 @@ export default class App extends Component {
         <NavTab
           onSelectTab={this.onSelectTab}
           currentTab={this.state.currentTab}/>
-        <FloatingButton onPress={this.toggleAddNewItem}/>
+        <FloatingButton
+          onPress={this.toggleAddNewItem}
+          addingItem={this.state.addingItem}/>
       </View>
     )
   }
