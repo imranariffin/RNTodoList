@@ -9,6 +9,7 @@ import FloatingButton from './lib/components/FloatingButton/index'
 import TodoList from './lib/components/TodoList'
 import Tabs from './lib/constants/Tabs'
 import Colors from './lib/constants/Colors'
+import uuidv4 from 'uuid/v4'
 
 export default class App extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ export default class App extends Component {
     setTimeout(() => {
       const byIds = [1,2,3]
         .map(x => ({
-          id: x.toString(),
+          id: uuidv4(),
           text: `Item #${x}`,
           completed: false,
         }))
@@ -140,7 +141,7 @@ export default class App extends Component {
   onDoneEditingAddItem = () => {
 
     let byIds = {...this.state.items.byIds}
-    const newItemId = `${byIds.length}`
+    const newItemId = uuidv4()
     byIds[newItemId] = {
       id: newItemId,
       completed: false,
