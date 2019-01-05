@@ -10,191 +10,24 @@ import TodoList from './lib/components/TodoList'
 import Tabs from './lib/constants/Tabs'
 import Colors from './lib/constants/Colors'
 import uuidv4 from 'uuid/v4'
+import { Provider } from 'react-redux'
+import store from './lib/state/store'
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      items: {
-        byIds: {},
-        allIds: [],
-        activeIds: [],
-        completedIds: [],
-        isLoading: true,
-      },
-      text: '',
-      addingItem: false,
-      currentTab: Tabs.ALL,
-    }
-  }
-
   render() {
-    const currentTab = this.state.currentTab
-    let items
-    switch(currentTab) {
-      case Tabs.all:
-        items = this.state.items.allIds
-          .map(itemId => this.state.items.byIds[itemId])
-        break
-      case Tabs.active:
-        items = this.state.items.activeIds
-          .map(itemId => this.state.items.byIds[itemId])
-        break
-      case Tabs.completed:
-        items = this.state.items.completedIds
-          .map(itemId => this.state.items.byIds[itemId])
-        break
-      default:
-        items = this.state.items.allIds
-          .map(itemId => this.state.items.byIds[itemId])
-    }
-
     return (
-      <View style={styles.container}>
-        <Header/>
-        <View style={styles.body}>
-          {
-            this.state.addingItem &&
-            <AddItem
-              addItemText={this.state.text}
-              onEditingAddItem={this.editingAddItem}
-              onAddItem={this.onDoneEditingAddItem}
-            />
-          }
-          <TodoList
-            items={items}
-            isLoading={this.state.isLoading}
-            deleteItem={this.deleteItem}
-            toggleCompleted={this.toggleCompleted}
-          />
+      <Provider store={store}>
+        <View style={styles.container}>
+          <Header/>
+          <View style={styles.body}>
+            <AddItem/>
+            <TodoList/>
+          </View>
+          <NavTab/>
+          <FloatingButton/>
         </View>
-        <NavTab
-          onSelectTab={this.onSelectTab}
-          currentTab={this.state.currentTab}/>
-        <FloatingButton
-          onPress={this.toggleAddNewItem}
-          addingItem={this.state.addingItem}/>
-      </View>
+      </Provider>
     )
-  }
-
-  componentDidMount() {
-    this.setState({
-      items: {
-        ...this.state.items,
-        isLoading: true,
-      }
-    })
-    setTimeout(() => {
-      const byIds = [1,2,3]
-        .map(x => ({
-          id: uuidv4(),
-          text: `Item #${x}`,
-          completed: false,
-        }))
-        .reduce((acc, item) => ({
-          ...acc,
-          [item.id]: {...item},
-        }), {})
-      const allIds = Object.keys(byIds)
-      const activeIds = allIds.filter(itemId => !byIds[itemId].completed)
-      const completedIds = allIds.filter(itemId => byIds[itemId].completed)
-
-      this.setState({
-        items: {
-          byIds,
-          allIds,
-          activeIds,
-          completedIds,
-          isLoading: false,
-        },
-      })
-    }, 1000)
-  }
-
-  deleteItem = (itemId) => () => {
-    if (!(itemId in this.state.items.byIds)) {
-      return
-    }
-
-    let byIds = {...this.state.items.byIds}
-    delete byIds[itemId]
-    const allIds = Object.keys(byIds)
-    const activeIds = allIds.filter(itemId => !byIds[itemId].completed)
-    const completedIds = allIds.filter(itemId => byIds[itemId].completed)
-
-    this.setState({
-      items: {
-        ...this.state.items,
-        byIds,
-        allIds,
-        activeIds,
-        completedIds,
-      }
-    })
-  }
-
-  editingAddItem = (text) => {
-    this.setState({text})
-  }
-
-  onDoneEditingAddItem = () => {
-
-    let byIds = {...this.state.items.byIds}
-    const newItemId = uuidv4()
-    byIds[newItemId] = {
-      id: newItemId,
-      completed: false,
-      text: this.state.text,
-    }
-    const allIds = Object.keys(byIds)
-    const activeIds = allIds.filter(itemId => !byIds[itemId].completed)
-    const completedIds = allIds.filter(itemId => byIds[itemId].completed)
-
-    this.setState({
-      items: {
-        ...this.state.items,
-        byIds,
-        allIds,
-        activeIds,
-        completedIds,
-      },
-      text: ''
-    })
-  }
-
-  toggleCompleted = (itemId) => () => {
-    let byIds = {...this.state.items.byIds}
-    byIds[itemId] = {
-      ...byIds[itemId],
-      completed: !byIds[itemId].completed
-    }
-    const allIds = Object.keys(byIds)
-    const activeIds = allIds.filter(itemId => !byIds[itemId].completed)
-    const completedIds = allIds.filter(itemId => byIds[itemId].completed)
-
-    this.setState({
-      items: {
-        ...this.state.items,
-        byIds,
-        allIds,
-        activeIds,
-        completedIds,
-      }
-    })
-  }
-
-  toggleAddNewItem = () => {
-    const addingItem = !this.state.addingItem
-    this.setState({
-      addingItem
-    })
-  }
-
-  onSelectTab = (tab) => {
-    this.setState({
-      currentTab: tab,
-    })
   }
 }
 
