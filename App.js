@@ -2,16 +2,16 @@ import React, { Component } from 'react'
 import {
   StyleSheet, Text, View, FlatList, TextInput, Button
 } from 'react-native'
-import Header from './lib/components/Header'
-import AddItem from './lib/components/AddItem'
-import NavTab from './lib/components/NavTab'
-import FloatingButton from './lib/components/FloatingButton/index'
-import TodoList from './lib/components/TodoList'
-import Tabs from './lib/constants/Tabs'
-import Colors from './lib/constants/Colors'
+import Header from '@components/Header'
+import AddItem from '@components/AddItem'
+import NavTab from '@components/NavTab'
+import FloatingButton from '@components/FloatingButton'
+import TodoList from '@components/TodoList'
+import Tabs from '@constants/Tabs'
+import Colors from '@constants/Colors'
 import uuidv4 from 'uuid/v4'
 import { Provider } from 'react-redux'
-import store from './lib/state/store'
+import store from '@state/store'
 
 export default class App extends Component {
   render() {
