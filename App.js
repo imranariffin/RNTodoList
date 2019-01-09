@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import {
   StyleSheet, Text, View, FlatList, TextInput, Button
 } from 'react-native'
+import uuidv4 from 'uuid/v4'
+import { Provider } from 'react-redux'
 import Header from '@components/Header'
 import AddItem from '@components/AddItem'
 import NavTab from '@components/NavTab'
@@ -10,8 +12,6 @@ import TodoList from '@components/TodoList'
 import ErrorDialog from '@components/ErrorDialog'
 import Tabs from '@constants/Tabs'
 import Colors from '@constants/Colors'
-import uuidv4 from 'uuid/v4'
-import { Provider } from 'react-redux'
 import store from '@state/store'
 
 export default class App extends Component {
