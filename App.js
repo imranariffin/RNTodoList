@@ -13,6 +13,7 @@ import ErrorDialog from '@components/ErrorDialog'
 import Tabs from '@constants/Tabs'
 import Colors from '@constants/Colors'
 import store from '@state/store'
+import { getItems } from '@state/actions'
 
 export default class App extends Component {
   render() {
@@ -30,6 +31,11 @@ export default class App extends Component {
         </View>
       </Provider>
     )
+  }
+
+  componentDidMount() {
+    const { dispatch } = store
+    dispatch(getItems())
   }
 }
 
